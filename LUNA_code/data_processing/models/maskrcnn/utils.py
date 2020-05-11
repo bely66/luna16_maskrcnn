@@ -456,7 +456,10 @@ def minimize_mask(bbox, mask, mini_shape):
         m = m[y1:y2, x1:x2]
         if m.size == 0:
             raise Exception("Invalid bounding box with area of zero")
-        m = scipy.misc.imresize(m.astype(float), mini_shape, interp='bilinear')
+        import PIL
+        # numpy.array(Image.fromarray(arr).resize())
+        m = np.array(m.astype(float).resize(mini_shape), PIL.Image.BILINEAR).astype(float)
+
         mini_mask[:, :, i] = np.where(m >= 128, 1, 0)
     return mini_mask
 
